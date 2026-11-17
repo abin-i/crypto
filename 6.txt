@@ -1,0 +1,114 @@
+Exp No:6  DEVELOP A BLOCKCHAIN-BASED CAR AUCTION NETWORK USING HYPERLEDGER FABRIC NODE SDK
+Date:
+
+Aim:
+To develop a blockchain-based car auction application using Hyperledger Fabric Node.js SDK/Gateway and store auction details and transaction results on the blockchain network.
+
+Software Requirements:
+• Docker
+• Node.js
+• npm
+• Hyperledger Fabric
+• Fabric Gateway Node.js API
+• JavaScript
+• Visual Studio Code
+
+Description:
+The car auction network provides a decentralized platform where car owners can register vehicles and buyers can submit bids.
+The blockchain maintains:
+• Vehicle information.
+• Seller details.
+• Auction details.
+• Bid records.
+• Winning bid information.
+• Ownership transfer records.
+
+Procedure:
+1. Start the Hyperledger Fabric test network.
+2. Create an auction chaincode.
+3. Register a vehicle.
+4. Create an auction.
+5. Submit bids.
+6. Close the auction.
+7. Identify the winning bid.
+8. Query auction results.
+
+Step 1: Create auction chaincode
+Create auction.js.
+"use strict";
+const { Contract } = require("fabric-contract-api");
+
+class CarAuction extends Contract {
+    async registerCar(ctx, id, model, owner) {
+        const car = {
+            ID: id,
+            Model: model,
+            Owner: owner,
+            Status: "Available"
+        };
+        await ctx.stub.putState(
+            id,
+            Buffer.from(JSON.stringify(car))
+        );
+        return JSON.stringify(car);
+    }
+    async createAuction(ctx, id, startingPrice) {
+        const auction = {
+            ID: id,
+            StartingPrice: Number(startingPrice),
+            HighestBid: Number(startingPrice),
+            Winner: "",
+            Status: "Open"
+        };
+        await ctx.stub.putState(
+            "AUCTION_" + id,
+            Buffer.from(JSON.stringify(auction))
+        );
+        return JSON.stringify(auction);
+    }
+    async queryAuction(ctx, id) {
+        const data = await ctx.stub.getState(
+            "AUCTION_" + id
+        );
+        if (!data || data.length === 0) {
+            throw new Error("Auction not found");
+        }
+        return data.toString();
+    }
+}
+module.exports = CarAuction;
+
+Step 2: Register a car
+registerCar("CAR101", "Honda City", "Seller1");
+
+Step 3: Create an auction
+createAuction("A101", "500000");
+
+Step 4: Query auction information
+queryAuction("A101");
+
+Expected Output:
+{
+  "ID": "A101",
+  "StartingPrice": 500000,
+  "HighestBid": 500000,
+  "Winner": "",
+  "Status": "Open"
+}
+
+Step 5: Auction application development
+Create a web application using HTML, CSS, JavaScript and Node.js.
+The application should contain:
+• Car registration form.
+• Auction creation form.
+• Bid submission form.
+• Auction status display.
+• Winning bidder details.
+• Transaction history.
+
+
+
+
+
+Result:
+Thus, a blockchain-based car auction application is developed using Hyperledger Fabric, enabling vehicle registration, auction creation and querying of auction information.

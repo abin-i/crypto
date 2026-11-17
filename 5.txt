@@ -1,0 +1,128 @@
+Exp No:5  DEVELOP A BLOCKCHAIN-BASED FITNESS CLUB REWARDS TRACKING APPLICATION
+Date:
+
+Aim:
+To develop a web application using Hyperledger Fabric to track and trace fitness club members' reward points and transactions.
+
+Software Requirements:
+• Docker
+• Hyperledger Fabric
+• Node.js
+• Express.js
+• HTML, CSS and JavaScript
+• Fabric Gateway
+• Visual Studio Code
+
+Description:
+The fitness club rewards application maintains member information and reward points using blockchain technology.
+Members receive reward points for activities such as:
+• Gym attendance.
+• Completing fitness challenges.
+• Participating in competitions.
+• Achieving fitness milestones.
+
+Procedure:
+1. Create a Hyperledger Fabric network.
+2. Create a fitness rewards chaincode.
+3. Define member details and reward points.
+4. Implement functions to register members.
+5. Implement functions to add and redeem points.
+6. Develop a web interface.
+7. Connect the web application to Fabric.
+8. Test reward transactions.
+
+Step 1: Create chaincode functions
+The following is a simplified JavaScript chaincode example.
+"use strict";
+const { Contract } = require("fabric-contract-api");
+class FitnessRewards extends Contract {
+    async registerMember(ctx, id, name) {
+        const member = {
+            ID: id,
+            Name: name,
+            Points: 0
+        };
+        await ctx.stub.putState(
+            id,
+            Buffer.from(JSON.stringify(member))
+        );
+        return JSON.stringify(member);
+    }
+    async addPoints(ctx, id, points) {
+        const data = await ctx.stub.getState(id);
+
+        if (!data || data.length === 0) {
+            throw new Error("Member not found");
+        }
+        const member = JSON.parse(data.toString());
+        const amount = Number(points);
+        if (!Number.isInteger(amount) || amount <= 0) {
+            throw new Error("Invalid points");
+        }
+        member.Points += amount;
+        await ctx.stub.putState(
+            id,
+            Buffer.from(JSON.stringify(member))
+        );
+
+        return JSON.stringify(member);
+    }
+    async queryMember(ctx, id) {
+        const data = await ctx.stub.getState(id);
+        if (!data || data.length === 0) {
+            throw new Error("Member not found");
+        }
+        return data.toString();
+    }
+}
+module.exports = FitnessRewards;
+
+Step 2: Create a member
+registerMember("M101", "Arun");
+
+Step 3: Add reward points
+addPoints("M101", "100");
+
+Step 4: Query member rewards
+queryMember("M101");
+
+Expected Output:
+{
+  "ID": "M101",
+  "Name": "Arun",
+  "Points": 100
+}
+
+Step 5: Develop the web interface
+Create an HTML page:
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fitness Club Rewards</title>
+</head>
+<body>
+<h2>Fitness Club Rewards System</h2>
+<label>Member ID:</label>
+<input type="text" id="memberId">
+<label>Member Name:</label>
+<input type="text" id="memberName">
+<button onclick="registerMember()">
+    Register Member
+</button>
+<h3>Reward Points</h3>
+<input type="number" id="points"
+       placeholder="Enter points">
+<button onclick="addPoints()">
+    Add Points
+</button>
+<div id="result"></div>
+</body>
+</html>
+The HTML page can be connected to Express.js API endpoints, which submit transactions to the Fabric Gateway.
+
+
+
+
+
+Result:
+Thus, a blockchain-based fitness club rewards tracking application is developed to register members, add reward points and maintain reward transaction records using Hyperledger Fabric.

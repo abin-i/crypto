@@ -1,0 +1,572 @@
+### CCS 339 – Experiments 1 to 4: Windows setup and practical guide
+
+We'll keep the same official Hyperledger Fabric repository, same sample chaincode, same asset names and same transaction operations wherever possible.
+
+I'll separate the commands into two categories:
+
+* Windows-native: PowerShell, Command Prompt and VS Code.
+
+* Fabric scripts: Git Bash is worth testing, but it is not an officially guaranteed replacement for Linux. Hyperledger's current documentation recommends WSL2 for Windows because its test network depends on Bash and Linux-compatible utilities. GitHub +1
+
+I don't want you to waste your practical time expecting an unsupported command to work. We'll first install and verify the Windows tools, then test the Fabric environment.
+
+================================================================================
+================================================================================
+====                                                                        ====
+====              EXPERIMENT 1 – INSTALLATION AND CONFIGURATION             ====
+====                                                                        ====
+================================================================================
+================================================================================
+
+
+
+### Experiment 1 – Installation and configuration
+
+### Step 1. Install Docker Desktop
+
+![Use docker on reComputer | Seeed Studio Wiki](https://images.openai.com/static-rsc-4/Dzb_ub1XSunIllrbkhmbxfvCaF7wJdKMzvIWC_ULSU3A9VAjsMojnleGBiGjDyk_OmwhXimaw9pb7sE06e_NwcGMrONKWYv1Y8xd5mdBAUYNqepQe8zpGxYQAigEywIcMOmNbRiSw_bLlzZqMFNxBLFflsBLfZwyadFjEwXDxWLmc4EicYMqDCGbojKS_GaJ?purpose=fullsize)
+
+Docker Desktop
+
+[Download Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/?utm_source=chatgpt.com)
+
+* Download Docker Desktop.
+
+* Run the installer.
+
+* Choose the WSL 2 backend if prompted.
+
+* Restart Windows if required.
+
+* Open Docker Desktop and wait until its engine is running.
+
+Open PowerShell and verify:
+
+```powershell
+docker --version
+docker compose version
+```
+
+Test whether Docker can run containers:
+
+```powershell
+docker run hello-world
+```
+
+Expected: a message saying Hello from Docker!
+
+### Step 2. Install Node.js
+
+![Yukti Software](https://images.openai.com/static-rsc-4/yIl0uveB9yDUQ2jKb6ZUXBOBWmlACpDb3rbPKn-Cq6JNxrtcLlB0ORG2j3TOUQ7KM3SaW57nMVvub_Uh7-hnp12EdwBVeL4XC4lK-aRReAYF2kse6wx0qLQA4gYnEKO6hWiuIm1zGYxBSv7Go57NXdvrkcindNzkzbdS6Ovqn8vwtgS8q2-_7PJNXJZlhcdP?purpose=fullsize)
+
+Node.js LTS
+
+[Download Node.js](https://nodejs.org/en/download?utm_source=chatgpt.com)
+
+Download the Windows installer, run it and complete installation.
+
+Verify in PowerShell:
+
+```powershell
+node --version
+npm --version
+```
+
+### Step 3. Install Java JDK
+
+![리눅스 Adoptium Temurin JDK 수동 설치 — Razorbacky :: 인간은 항상 앞으로 나아가야 한다.](https://images.openai.com/static-rsc-4/9cTS1--ympKNYHAgj7SIyQqCBO88IKDfKjNM5QbEzR7VvFGJNOvu6ToMZG9OMkubsc1HoYcFCG5S_MxTFP1yCyuIMcKqoUuK9DDdQaF3iAapFtvWAd7dk0BAsCxU0fuSaOhbNnNBxwgsZ0imZATNc2jUcWRVHa6eMfx4F371fF1wxEB9opEglXIGWQd-qcMN?purpose=fullsize)
+
+Java JDK
+
+[Download Eclipse Temurin JDK](https://adoptium.net/temurin/releases/?utm_source=chatgpt.com)
+
+Choose a Windows x64 JDK installer, preferably JDK 21.
+
+Verify:
+
+```powershell
+java -version
+javac -version
+```
+
+### Step 4. Install Git for Windows
+
+![Git for Windows](https://images.openai.com/static-rsc-4/5kdfZsIrWuxrc0-Yr-0dKdhMy-Mm8Y8TWSKvQqTyok4udkELapnjFU9y_mLiZpEYtSSmTA27h3fOfUndmlBMWDeeH6XAMgZKCuxAFDx3h65Hd890zvEHqGCN8hIHD5VqhvaR1umAZivYMVEuHRRBC4lfQPfPSE9TyYKfigmnxYyPRM-CU_LwbqSgeQiUFt1i?purpose=fullsize)
+
+Git for Windows
+
+[Download Git for Windows](https://git-scm.com/downloads/win?utm_source=chatgpt.com)
+
+This provides Git Bash.
+
+Open PowerShell and configure Git:
+
+```powershell
+git config --global core.autocrlf false
+git config --global core.longpaths true
+```
+
+Verify:
+
+```powershell
+git --version
+git config --get core.autocrlf
+git config --get core.longpaths
+```
+
+Expected values:
+
+```text
+false
+true
+```
+
+### Step 5. Download the official Hyperledger Fabric repository
+
+In PowerShell:
+
+```powershell
+mkdir blockchain-lab
+cd blockchain-lab
+git clone https://github.com/hyperledger/fabric-samples.git
+```
+
+This downloads the official sample repository.
+
+You should now have:
+
+```text
+blockchain-lab
+    └── fabric-samples
+        ├── test-network
+        ├── asset-transfer-basic
+        └── other sample folders
+```
+
+### Step 6. Download Fabric binaries and Docker images
+
+Open Git Bash in the `blockchain-lab` directory.
+
+Download the official installer script:
+
+```bash
+curl -L -o install-fabric.sh https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh
+```
+
+Then try:
+
+```bash
+chmod +x install-fabric.sh
+./install-fabric.sh docker samples binary
+```
+
+Compatibility test
+
+This is the original Linux-based installer. Git Bash may not provide the environment it requires. If it fails with an unsupported OS, `uname`, binary download or execution error, don't keep retrying or manually copy Linux binaries into Windows. Stop here: the supported route for the Fabric network is WSL2. GitHub +1
+
+If it succeeds, verify Docker images:
+
+```powershell
+docker images
+```
+
+### Step 7. Install Hardhat
+
+In PowerShell:
+
+```powershell
+cd ..
+mkdir ethereum-project
+cd ethereum-project
+npm init -y
+npm install --save-dev hardhat
+npx hardhat --init
+```
+
+Follow the setup prompts.
+
+Verify:
+
+```powershell
+npx hardhat --version
+```
+
+Experiment 1 expected verification: Docker, Node.js, npm, Java, Git and Hardhat should display their version numbers. Fabric installation is successful only if the installer actually completes and the required binaries and images are available.
+
+
+
+
+
+================================================================================
+================================================================================
+====                                                                        ====
+====       EXPERIMENT 2 – CREATE AND DEPLOY A BLOCKCHAIN NETWORK            ====
+====                                                                        ====
+================================================================================
+================================================================================
+
+
+
+### Experiment 2 – Create and deploy a blockchain network
+
+Aim: Create a Hyperledger Fabric network, create a channel, deploy chaincode and perform invoke/query operations.
+
+### Step 1. Open Git Bash
+
+Navigate to the test network:
+
+```bash
+cd ~/blockchain-lab/fabric-samples/test-network
+```
+
+If your folder is on the Windows C drive, the equivalent Git Bash path might look like:
+
+```bash
+cd /c/Users/YourWindowsUsername/blockchain-lab/fabric-samples/test-network
+```
+
+Replace `YourWindowsUsername` with your actual Windows account folder name.
+
+### Step 2. Start the network
+
+```bash
+./network.sh up createChannel
+```
+
+This should start the Fabric network and create `mychannel`.
+
+### Step 3. Deploy chaincode
+
+```bash
+./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go
+```
+
+Here:
+
+* `basic` = chaincode name.
+
+* `-ccp` = chaincode folder path.
+
+* `-ccl go` = chaincode programming language.
+
+### Step 4. Set the peer environment
+
+In Git Bash:
+
+```bash
+export PATH=${PWD}/../bin:$PATH
+export FABRIC_CFG_PATH=${PWD}/../config/
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID=Org1MSP
+export CORE_PEER_ADDRESS=localhost:7051
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+```
+
+These commands configure the peer identity, network address, certificates and Fabric binary location.
+
+### Step 5. Query all assets
+
+```bash
+peer chaincode query -C mychannel -n basic -c '{"function":"GetAllAssets","Args":[]}'
+```
+
+This reads all assets from the ledger.
+
+### Step 6. Create an asset
+
+```bash
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n basic -c '{"function":"CreateAsset","Args":["asset6","blue","20","Tom","500"]}'
+```
+
+### Step 7. Query the created asset
+
+```bash
+peer chaincode query -C mychannel -n basic -c '{"function":"ReadAsset","Args":["asset6"]}'
+```
+
+Expected ledger result
+
+```json
+{
+  "ID": "asset6",
+  "Color": "blue",
+  "Size": 20,
+  "Owner": "Tom",
+  "AppraisedValue": 500
+}
+```
+
+Result: The asset is created and retrieved from the blockchain ledger.
+
+Important: Your manual calls this the Java SDK experiment, but the actual network deployment and asset commands above use Fabric CLI with Go chaincode. The Java SDK section in the manual only gives a short Java query example.
+
+
+
+
+
+================================================================================
+================================================================================
+====                                                                        ====
+====   EXPERIMENT 3 – INTERACT WITH A BLOCKCHAIN NETWORK USING AN APP      ====
+====                                                                        ====
+================================================================================
+================================================================================
+
+
+
+### Experiment 3 – Interact with a blockchain network using an application
+
+Windows-native application setup
+
+Aim: Create a Node.js application that interacts with Hyperledger Fabric.
+
+You can do the application development in Windows without Ubuntu.
+
+### Step 1. Open VS Code
+
+* Open VS Code.
+
+* Select File → Open Folder.
+
+* Create and open a folder called `blockchain-app`.
+
+* Select Terminal → New Terminal.
+
+* Make sure the terminal is PowerShell.
+
+Execute:
+
+```powershell
+npm init -y
+```
+
+### Step 2. Install the required packages
+
+```powershell
+npm install @hyperledger/fabric-gateway
+npm install @grpc/grpc-js
+```
+
+These install the Fabric Gateway client and gRPC communication library.
+
+### Step 3. Create the JavaScript file
+
+In VS Code Explorer:
+
+* Right-click the `blockchain-app` folder.
+
+* Select New File.
+
+* Name it `app.js`.
+
+* Paste this code:
+
+```javascript
+const grpc = require("@grpc/grpc-js");
+
+console.log("Blockchain Application Started");
+
+console.log("Connecting to Hyperledger Fabric...");
+
+async function main() {
+    try {
+        console.log("Connected to blockchain network");
+
+        console.log("Submitting transaction...");
+
+        console.log("Transaction completed");
+
+        console.log("Querying blockchain ledger...");
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+main();
+```
+
+Save the file using `Ctrl + S`.
+
+### Step 4. Execute the application
+
+In the VS Code terminal:
+
+```powershell
+node app.js
+```
+
+Expected output:
+
+```text
+Blockchain Application Started
+Connecting to Hyperledger Fabric...
+Connected to blockchain network
+Submitting transaction...
+Transaction completed
+Querying blockchain ledger...
+```
+
+Important: This is the demonstration code supplied by your manual. It prints these messages but does not actually connect to Fabric. For a real transaction and query, the Gateway connection, certificates, identity and transaction calls must be implemented, and the Fabric network must be running.
+
+Result: A Node.js application is created and executed successfully.
+
+
+
+
+
+================================================================================
+================================================================================
+====                                                                        ====
+====   EXPERIMENT 4 – DEVELOP AND DEPLOY AN ASSET TRANSFER APPLICATION     ====
+====                                                                        ====
+================================================================================
+================================================================================
+
+
+
+### Experiment 4 – Develop and deploy an asset transfer application
+
+Aim: Create, read and transfer ownership of digital assets using Hyperledger Fabric.
+
+This experiment uses the same Fabric test network and chaincode as Experiment 2. You do not need to download everything again.
+
+### Step 1. Open Git Bash
+
+Navigate to:
+
+```bash
+cd /c/Users/YourWindowsUsername/blockchain-lab/fabric-samples/test-network
+```
+
+Use your actual Windows username and folder location.
+
+### Step 2. Start the network
+
+If the network is already running from Experiment 2, don't start another copy.
+
+If it has been stopped, execute:
+
+```bash
+./network.sh up createChannel
+```
+
+### Step 3. Deploy chaincode
+
+```bash
+./network.sh deployCC -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go
+```
+
+If chaincode `basic` is already deployed on the running network, you do not need to deploy it again.
+
+### Step 4. Configure the peer environment
+
+If you opened a new Git Bash terminal, set these variables again:
+
+```bash
+export PATH=${PWD}/../bin:$PATH
+export FABRIC_CFG_PATH=${PWD}/../config/
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID=Org1MSP
+export CORE_PEER_ADDRESS=localhost:7051
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+```
+
+### Step 5. Create an asset
+
+```bash
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n basic -c '{"function":"CreateAsset","Args":["asset7","red","30","Alice","1000"]}'
+```
+
+This creates an asset with ID `asset7`.
+
+### Step 6. Read asset details
+
+```bash
+peer chaincode query -C mychannel -n basic -c '{"function":"ReadAsset","Args":["asset7"]}'
+```
+
+Expected output:
+
+```json
+{
+  "ID": "asset7",
+  "Color": "red",
+  "Size": 30,
+  "Owner": "Alice",
+  "AppraisedValue": 1000
+}
+```
+
+### Step 7. Transfer ownership
+
+```bash
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n basic -c '{"function":"TransferAsset","Args":["asset7","Bob"]}'
+```
+
+This transfers ownership from Alice to Bob.
+
+### Step 8. Verify the new owner
+
+```bash
+peer chaincode query -C mychannel -n basic -c '{"function":"ReadAsset","Args":["asset7"]}'
+```
+
+Expected output
+
+```json
+{
+  "ID": "asset7",
+  "Color": "red",
+  "Size": 30,
+  "Owner": "Bob",
+  "AppraisedValue": 1000
+}
+```
+
+Result: The asset is created, queried and transferred successfully using Hyperledger Fabric.
+
+### Quick revision: Which terminal do you open?
+
+| Task                        | Where to execute            |
+| --------------------------- | --------------------------- |
+| Install and verify Docker   | PowerShell                  |
+| Install Node.js and Java    | Windows installers          |
+| Download GitHub repository  | PowerShell                  |
+| Run install-fabric.sh       | Git Bash attempt            |
+| Run network.sh              | Git Bash attempt            |
+| Run peer chaincode commands | Git Bash attempt            |
+| Create app.js               | VS Code                     |
+| Run node app.js             | VS Code PowerShell terminal |
+| Install Hardhat             | PowerShell                  |
+
+### Before you start: three important checks
+
+* Docker Desktop must be running before you start the Fabric network.
+
+* Experiments 2 and 4 depend on actual Fabric binaries and a compatible shell. Git Bash is not officially guaranteed to run the current test network on Windows.
+
+* Don't write the expected output in your record as proof of a successful run. Verify the actual terminal output.
+
+The official installation and prerequisites references are here:
+
+* [Hyperledger Fabric installation instructions](https://github.com/hyperledger/fabric/blob/main/docs/source/install.md?utm_source=chatgpt.com)
+
+* [Hyperledger Fabric Windows prerequisites](https://github.com/hyperledger/fabric/blob/main/docs/source/prereqs.md?utm_source=chatgpt.com)
+
+* [Official Fabric samples repository](https://github.com/hyperledger/fabric-samples?utm_source=chatgpt.com)
+
+### Let's test your setup first
+
+Don't install everything blindly. Start with these three PowerShell commands:
+
+```powershell
+docker --version
+node --version
+git --version
+```
+
+Send me a screenshot of the output. I'll help you verify the Windows setup and then we can test the official Fabric installer before moving to Experiment 2. That way, you won't discover a compatibility problem on the day of your practical.
+

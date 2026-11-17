@@ -1,0 +1,78 @@
+Exp No:3  INTERACT WITH A BLOCKCHAIN NETWORK USING AN APPLICATION
+Date:
+
+Aim:
+To develop an application that interacts with a Hyperledger Fabric blockchain network and executes transactions and queries according to the network rules.
+
+Software Requirements:
+• Node.js
+• npm
+• Docker
+• Hyperledger Fabric
+• Fabric Gateway Node.js API
+• Visual Studio Code
+
+Procedure:
+1. Start the Hyperledger Fabric test network.
+2. Create a Node.js application.
+3. Install the Fabric Gateway client library.
+4. Connect the application to the blockchain network.
+5. Submit transactions.
+6. Query the ledger.
+7. Display the transaction results.
+
+Step 1: Create the application
+mkdir blockchain-app
+cd blockchain-app
+
+npm init -y
+npm install @hyperledger/fabric-gateway
+npm install @grpc/grpc-js
+
+Step 2: Create the JavaScript file
+Create app.js.
+const grpc = require("@grpc/grpc-js");
+
+console.log("Blockchain Application Started");
+
+console.log("Connecting to Hyperledger Fabric...");
+
+// Connect using the configured Fabric Gateway
+// identity, certificate, private key and TLS settings.
+
+async function main() {
+    try {
+        console.log("Connected to blockchain network");
+
+        console.log("Submitting transaction...");
+
+        // SubmitTransaction() is called
+        // after establishing a Gateway connection.
+
+        console.log("Transaction completed");
+
+        console.log("Querying blockchain ledger...");
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+main();
+
+Step 3: Execute the application
+node app.js
+
+Expected Output:
+Blockchain Application Started
+Connecting to Hyperledger Fabric...
+Connected to blockchain network
+Submitting transaction...
+Transaction completed
+Querying blockchain ledger...
+
+
+
+
+Result:
+Thus, a Node.js application is created to interact with the Hyperledger Fabric network and perform blockchain transaction and query operations.

@@ -1,0 +1,67 @@
+Exp No:1  INSTALLATION AND CONFIGURATION OF BLOCKCHAIN DEVELOPMENT ENVIRONMENT
+Date:
+
+Aim:
+To install and understand Docker, Node.js, Java, Hyperledger Fabric and Ethereum, and configure the local machine or cloud instance for blockchain application development.
+
+Software Requirements:
+• Operating System: Ubuntu 22.04/24.04 or Windows with WSL2
+• Docker and Docker Compose
+• Node.js and npm
+• Java JDK
+• Hyperledger Fabric binaries and samples
+• Ethereum development tools (Ganache or Hardhat)
+
+Procedure:
+1. Install Docker on the local machine.
+2. Verify Docker installation.
+3. Install Node.js and npm.
+4. Install Java JDK.
+5. Download Hyperledger Fabric samples and binaries.
+6. Configure the Fabric development environment.
+7. Install Ethereum development tools.
+8. Verify all installations.
+
+Commands:
+Install Docker and verify:
+docker --version
+docker compose version
+
+Install Node.js and npm:
+node --version
+npm --version
+
+Install Java:
+java -version
+javac -version
+
+Download Hyperledger Fabric samples and binaries:
+mkdir blockchain-lab
+cd blockchain-lab
+curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh
+
+For a single-line command, use:
+curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh
+
+Download Fabric samples and Docker images:
+install-fabric.sh docker samples binary
+
+Install Hardhat:
+mkdir ethereum-project
+cd ethereum-project
+npm init -y
+npm install --save-dev hardhat
+npx hardhat --init
+
+Expected Output:
+• Docker version displayed.
+• Node.js and npm versions displayed.
+• Java compiler version displayed.
+• Hyperledger Fabric binaries downloaded.
+• Ethereum development environment configured.
+
+
+
+
+Result:
+Thus, Docker, Node.js, Java, Hyperledger Fabric and Ethereum development environments are installed and configured successfully.

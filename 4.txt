@@ -1,0 +1,89 @@
+Exp No:4  DEVELOP AND DEPLOY AN ASSET TRANSFER APPLICATION USING BLOCKCHAIN
+Date:
+
+Aim:
+To develop and deploy an asset-transfer application using Hyperledger Fabric to create, read, update and transfer digital assets between participants.
+
+Software Requirements:
+• Docker
+• Hyperledger Fabric
+• Node.js
+• Fabric Gateway
+• JavaScript
+• Visual Studio Code
+
+Procedure:
+1. Start the Hyperledger Fabric network.
+2. Deploy asset-transfer chaincode.
+3. Create an asset.
+4. Read asset information.
+5. Update asset details.
+6. Transfer asset ownership.
+7. Query the updated asset.
+
+Step 1: Start the network
+cd fabric-samples/test-network
+./network.sh up createChannel
+
+Step 2: Deploy asset-transfer chaincode
+./network.sh deployCC \
+  -ccn basic \
+  -ccp ../asset-transfer-basic/chaincode-go \
+  -ccl go
+
+Step 3: Create an asset
+peer chaincode invoke \
+  -o localhost:7050 \
+  --ordererTLSHostnameOverride orderer.example.com \
+  --tls \
+  --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" \
+  -C mychannel \
+  -n basic \
+  -c '{"function":"CreateAsset","Args":[ "asset7","red","30","Alice","1000"]}'
+
+Step 4: Read asset details
+peer chaincode query \
+  -C mychannel \
+  -n basic \
+  -c '{"function":"ReadAsset","Args":["asset7"]}'
+
+Step 5: Transfer ownership
+peer chaincode invoke \
+  -o localhost:7050 \
+  --ordererTLSHostnameOverride orderer.example.com \
+  --tls \
+  --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" \
+  -C mychannel \
+  -n basic \
+  -c '{"function":"TransferAsset","Args":["asset7","Bob"]}'
+
+Step 6: Verify ownership
+peer chaincode query \
+  -C mychannel \
+  -n basic \
+  -c '{"function":"ReadAsset","Args":["asset7"]}'
+
+Expected Output:
+Before transfer:
+{
+  "ID": "asset7",
+  "Color": "red",
+  "Size": 30,
+  "Owner": "Alice",
+  "AppraisedValue": 1000
+}
+After transfer:
+{
+  "ID": "asset7",
+  "Color": "red",
+  "Size": 30,
+  "Owner": "Bob",
+  "AppraisedValue": 1000
+}
+
+
+
+
+
+Result:
+Thus, an asset-transfer application is deployed successfully, and asset ownership is transferred using Hyperledger Fabric.
